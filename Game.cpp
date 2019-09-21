@@ -7,8 +7,11 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 	: mWindow(sf::VideoMode(WINDOW_X, WINDOW_Y), "Particle Simulator", sf::Style::Close)
+	, textureHolder{}
 {
 	mWindow.setKeyRepeatEnabled(false);
+	loadTextures();
+	setupScene();
 }
 
 void Game::run()
@@ -59,4 +62,42 @@ void Game::render()
 		mWindow.draw(*particle);
 	
 	mWindow.display();
+}
+
+void Game::setupScene()
+{
+	Particle* test = new SquareParticle(20.0f, sf::Vector2f(20, 20), sf::Vector2f(1, 1), textureHolder.get("red"));
+
+
+
+}
+
+void Game::loadTextures()
+{
+	// get files from folder first 
+	std::map<std::string, std::string> files;
+	std::string folderPath = "Media";
+
+	//	For each file in folder
+	for (auto & p : std::experimental::filesystem::directory_iterator(folderPath))
+	{
+		if (!std::experimental::filesystem::is_regular_file(p))		//	Check if not directory, stream, etc.
+			continue;
+
+		///	Get the m_entity name
+		std::string name = p.path().filename().string();		//	E.g. "Player.txt", "Player.dat"
+		std::string path = p.path().string();		//	E.g. "Player.txt"
+		auto checkIfFType = name.find_first_of('.');
+		name.erase(checkIfFType);							//	now = "Player"
+		name.erase(std::remove(name.begin(), name.end(), '"'), name.end());		//	now = Player																										//	Get the path
+
+
+		files.insert(std::make_pair(name, path));
+	}
+
+	for (const auto& file : files)
+	{
+		std::cout << file.first << " " << file.second << '\n';
+		textureHolder.load(file.first, file.second);
+	}
 }

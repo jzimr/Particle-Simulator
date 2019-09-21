@@ -1,8 +1,15 @@
 #pragma once
+#include <iostream>
+#include <vector>
+#include "Particle.h"
 
 class Factory
 {
+public:
 	Factory();
 
-	virtual void factoryMethod() = 0;
+	std::vector<Particle*>			operation();
+	
+private:
+	virtual std::vector<Particle*>	createParticles(int amount) = 0;
 };

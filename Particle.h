@@ -5,7 +5,6 @@ class Particle : public sf::Transformable, public sf::Drawable, public sf::NonCo
 {
 
 public:
-	Particle();
 
 	void			update(float dt);
 
@@ -18,6 +17,7 @@ protected:
 	Particle(float speed, sf::Vector2f direction, sf::Shape* shape);
 
 private:
+	Particle();
 	void	draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:

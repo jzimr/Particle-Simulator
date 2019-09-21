@@ -3,5 +3,6 @@
 
 class SquareParticle : public Particle
 {
-	SquareParticle(float speed, sf::Vector2f direction, sf::Vector2f size, sf::Texture texture);
+public:
+	SquareParticle(float speed, sf::Vector2f direction, sf::Vector2f size, sf::Texture& texture);
 };
