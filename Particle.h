@@ -14,6 +14,8 @@ public:
 	void			attachChild(Particle* child, sf::Vector2f offset = sf::Vector2f(0,0));
 	//Particle*		detachChild(Particle* child);
 
+	int				getWidth();
+
 protected:
 	Particle(int speed, sf::Vector2f direction, sf::Shape* shape);
 

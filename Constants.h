@@ -7,4 +7,6 @@ namespace Settings
 
 	constexpr int MAX_SPEED = 200;
 	constexpr int MAX_SIZE = 15;
+
+	constexpr int MAX_CLUSTER_SIZE = 4;		// how many particles can be in a cluster
 }

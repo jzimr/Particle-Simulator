@@ -27,7 +27,10 @@ void Particle::update(float dt)
 	if (mParent == NULL)
 		move(sf::Vector2f(mSpeed*mDirection.x*dt, mSpeed* mDirection.y*dt));
 	else
-		setPosition(mParent->getPosition() + mLocalPosition);
+	{
+		// todo child
+	}
+	
 	pos = getPosition();
 
 	// check if particle has hit window border
@@ -67,8 +70,14 @@ void Particle::attachChild(Particle * child, sf::Vector2f offset)
 {
 	mChildren.push_back(child);
 	child->mParent = this;
+	child->setPosition(getPosition() + offset);
 
 	child->mLocalPosition = offset;
+}
+
+int Particle::getWidth()
+{
+	return mShape->getGlobalBounds().width;
 }
 
 void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const

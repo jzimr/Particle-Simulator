@@ -7,6 +7,7 @@
 #include "CircleParticle.h"
 #include "TextureHolder.h"
 #include "SingleParticleFactory.h"
+#include "ClusterParticleFactory.h"
 
 class Game
 {

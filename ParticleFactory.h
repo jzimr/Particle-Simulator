@@ -17,6 +17,8 @@ public:
 
 protected:
 	ParticleFactory(TextureHolder<int>* mTextureHolder);
+
+	Particle* createRandomParticle();
 	int getRand(int lowest, int highest);
 
 protected:

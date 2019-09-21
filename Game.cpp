@@ -66,10 +66,10 @@ void Game::render()
 
 void Game::setupScene()
 {
-	SingleParticleFactory factory(&mTextureHolder);
+	ClusterParticleFactory factory(&mTextureHolder);
 
 
-	mParticles = factory.createParticles(20);
+	mParticles = factory.createParticles(10);
 
 	/*
 		for (int i = 0; i < 20; i++)
