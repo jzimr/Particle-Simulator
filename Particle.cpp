@@ -21,14 +21,14 @@ void Particle::update(float dt)
 {
 	sf::Vector2f pos;
 	sf::Vector2f newDirection;
-	float shapeRadius = mShape->getGlobalBounds().width;
+	float shapeRadius = getWidth() / 2;
 
 	// move object 
 	if (mParent == NULL)
 		move(sf::Vector2f(mSpeed*mDirection.x*dt, mSpeed* mDirection.y*dt));
 	else
 	{
-		// todo child
+		setPosition(mParent->getPosition() + mLocalPosition);
 	}
 	
 	pos = getPosition();
@@ -90,7 +90,7 @@ void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	// draw children
 	for (const Particle* child : mChildren)
-		child->draw(target, states);
+		target.draw(*child);
 }
 
 sf::Vector2f Particle::normalize(const sf::Vector2f& v)
