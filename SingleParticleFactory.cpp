@@ -7,14 +7,14 @@ SingleParticleFactory::SingleParticleFactory(TextureHolder<int>* mTextureHolder)
 {
 }
 
-std::vector<Particle*> SingleParticleFactory::createParticles(int amount)
+std::vector<Particle*> SingleParticleFactory::createParticles(int amount, sf::Vector2f where)
 {
 	std::vector<Particle*> mParticles;
 	Particle* particle;
 
 	for (int i = 0; i < amount; i++)
 	{
-		particle = createRandomParticle();
+		particle = createRandomParticle(where);
 		mParticles.push_back(particle);
 	}
 

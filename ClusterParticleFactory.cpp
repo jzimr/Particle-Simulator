@@ -7,7 +7,7 @@ ClusterParticleFactory::ClusterParticleFactory(TextureHolder<int>* mTextureHolde
 {
 }
 
-std::vector<Particle*> ClusterParticleFactory::createParticles(int amount)
+std::vector<Particle*> ClusterParticleFactory::createParticles(int amount, sf::Vector2f where)
 {
 	std::vector<Particle*> mParticles;
 	Particle* particleRoot;
@@ -18,12 +18,12 @@ std::vector<Particle*> ClusterParticleFactory::createParticles(int amount)
 	for (int i = 0; i < amount; i++)
 	{
 		clusterSize = getRand(2, MAX_CLUSTER_SIZE);
-		particleRoot = createRandomParticle();		// parent
+		particleRoot = createRandomParticle(where);		// parent
 		rootCenter = sf::Vector2f(particleRoot->getWidth() / 2, particleRoot->getWidth() / 2);
 
 		for (int i = 0; i < clusterSize; i++)
 		{
-			particleChild = createRandomParticle();
+			particleChild = createRandomParticle(where);
 
 			randOffsetDirection = sf::Vector2f(getRand(0, 359), getRand(0, 359));
 			newPoint = sf::Vector2f(rootCenter.x + cos(randOffsetDirection.x)*(rootCenter.x + particleChild->getWidth() / 2),

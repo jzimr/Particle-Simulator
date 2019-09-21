@@ -26,6 +26,7 @@ private:
 private:
 	static const sf::Time		TimePerFrame;		// How many FPS?
 	sf::RenderWindow			mWindow;
+	ParticleFactory*			mFactory;
 	std::vector<Particle*>		mParticles;			// Holds all mParticles
 	TextureHolder<int>			mTextureHolder;		// Holds all textures
 };

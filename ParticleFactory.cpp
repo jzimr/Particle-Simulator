@@ -12,7 +12,7 @@ ParticleFactory::ParticleFactory(TextureHolder<int>* mTextureHolder)
 	srand(time(NULL));
 }
 
-Particle* ParticleFactory::createRandomParticle()
+Particle* ParticleFactory::createRandomParticle(sf::Vector2f pos)
 {
 	Particle* particle;
 
@@ -43,7 +43,7 @@ Particle* ParticleFactory::createRandomParticle()
 			mTextureHolder->get(randTexture)
 		};
 	}
-	particle->setPosition(Settings::WINDOW_X / 2.0f, Settings::WINDOW_Y / 2.0f);		// Spawn is center of screen
+	particle->setPosition(pos);		// Spawn is center of screen
 	return particle;
 }
 

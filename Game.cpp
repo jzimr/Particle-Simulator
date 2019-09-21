@@ -44,6 +44,23 @@ void Game::processInput()
 		if (event.type == sf::Event::Closed)
 			mWindow.close();
 
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			// get mouse position to world coordinates
+			sf::Vector2i mousepos = sf::Mouse::getPosition(mWindow);
+			sf::Vector2f converted = mWindow.mapPixelToCoords(mousepos);
+
+			if (event.mouseButton.button == sf::Mouse::Left)
+			{
+				mFactory = new SingleParticleFactory(&mTextureHolder);
+			}
+			else if (event.mouseButton.button == sf::Mouse::Right)
+				mFactory = new ClusterParticleFactory(&mTextureHolder);
+
+			// create new particles based on which mouse button was clicked
+			std::vector<Particle*> newParticles = mFactory->createParticles(10, converted);
+			mParticles.insert(mParticles.end(), newParticles.begin(), newParticles.end());
+		}
 
 	}
 }
@@ -66,10 +83,6 @@ void Game::render()
 
 void Game::setupScene()
 {
-	ClusterParticleFactory factory(&mTextureHolder);
-
-
-	mParticles = factory.createParticles(10);
 
 	/*
 		for (int i = 0; i < 20; i++)

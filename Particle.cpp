@@ -27,9 +27,7 @@ void Particle::update(float dt)
 	if (mParent == NULL)
 		move(sf::Vector2f(mSpeed*mDirection.x*dt, mSpeed* mDirection.y*dt));
 	else
-	{
 		setPosition(mParent->getPosition() + mLocalPosition);
-	}
 	
 	pos = getPosition();
 
@@ -78,6 +76,13 @@ void Particle::attachChild(Particle * child, sf::Vector2f offset)
 int Particle::getWidth()
 {
 	return mShape->getGlobalBounds().width;
+}
+
+Particle::~Particle()
+{
+	delete mShape;
+	for (Particle* child : mChildren)
+		delete child;
 }
 
 void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const

@@ -16,6 +16,8 @@ public:
 
 	int				getWidth();
 
+	~Particle();
+
 protected:
 	Particle(int speed, sf::Vector2f direction, sf::Shape* shape);
 

@@ -13,17 +13,17 @@ class ParticleFactory
 {
 public:
 	// Factory method that will be overriden in subclasses, creating unique products (mParticles)
-	virtual std::vector<Particle*>	createParticles(int amount) = 0;
+	virtual std::vector<Particle*>	createParticles(int amount, sf::Vector2f where) = 0;
 
 protected:
 	ParticleFactory(TextureHolder<int>* mTextureHolder);
 
-	Particle* createRandomParticle();
+	Particle* createRandomParticle(sf::Vector2f pos);
 	int getRand(int lowest, int highest);
-
-protected:
-	TextureHolder<int>* mTextureHolder;
 
 private:
 	ParticleFactory();
+
+protected:
+	TextureHolder<int>* mTextureHolder;
 };
