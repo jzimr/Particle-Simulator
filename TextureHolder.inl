@@ -14,6 +14,12 @@ void TextureHolder<Identifier>::load(const Identifier identifier, const std::str
 }
 
 template<typename Identifier>
+int TextureHolder<Identifier>::size()
+{
+	return textureMap.size();
+}
+
+template<typename Identifier>
 sf::Texture& TextureHolder<Identifier>::get(const Identifier identifier) const
 {
 	//typename std::map<Identifier, std::unique_ptr<sf::Texture>>::iterator foundID;

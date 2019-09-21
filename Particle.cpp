@@ -7,9 +7,9 @@ Particle::Particle()
 	throw "Direct instantiation of 'Particle' class not allowed";
 }
 
-Particle::Particle(float speed, sf::Vector2f direction, sf::Shape* shape)
+Particle::Particle(int speed, sf::Vector2f direction, sf::Shape* shape)
 	: mSpeed{speed}
-	, mDirection{direction}
+	, mDirection{normalize(direction)} // normalize direction so speed values have the same weight in all objects
 	, mParent{NULL}
 	, mChildren{}
 	, mLocalPosition{0,0}
@@ -82,4 +82,10 @@ void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw children
 	for (const Particle* child : mChildren)
 		child->draw(target, states);
+}
+
+sf::Vector2f Particle::normalize(const sf::Vector2f& v)
+{
+	float vLength = sqrtf(pow(v.x, 2) + pow(v.y, 2));
+	return sf::Vector2f(v.x / vLength, v.y / vLength);
 }

@@ -15,6 +15,8 @@ public:
 
 	sf::Texture&		get(const Identifier identifier) const;
 
+	int					size();
+
 private:
 	void				insertResource(Identifier id, std::unique_ptr<sf::Texture> texture);
 

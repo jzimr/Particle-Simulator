@@ -7,7 +7,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 	: mWindow(sf::VideoMode(WINDOW_X, WINDOW_Y), "Particle Simulator", sf::Style::Close)
-	, textureHolder{}
+	, mTextureHolder{}
 {
 	mWindow.setKeyRepeatEnabled(false);
 	loadTextures();
@@ -50,7 +50,7 @@ void Game::processInput()
 
 void Game::update(sf::Time elapsedTime)
 {
-	for (Particle* particle : particles)
+	for (Particle* particle : mParticles)
 		particle->update(elapsedTime.asSeconds());
 }
 
@@ -58,7 +58,7 @@ void Game::render()
 {
 	mWindow.clear();
 
-	for (Particle* particle : particles)
+	for (Particle* particle : mParticles)
 		mWindow.draw(*particle);
 
 	mWindow.display();
@@ -66,11 +66,18 @@ void Game::render()
 
 void Game::setupScene()
 {
-	for (int i = 0; i < 10000; i++)
-	{
-		Particle* test = new SquareParticle(20.0f, sf::Vector2f(20, 20), 100, textureHolder.get("red"));
-		particles.push_back(test);
-	}
+	SingleParticleFactory factory(&mTextureHolder);
+
+
+	mParticles = factory.createParticles(20);
+
+	/*
+		for (int i = 0; i < 20; i++)
+{
+	Particle* test = new CircleParticle(20, sf::Vector2f(20, 20), 15, mTextureHolder.get(0));
+	mParticles.push_back(test);
+}
+	*/
 
 
 }
@@ -90,17 +97,21 @@ void Game::loadTextures()
 		///	Get the m_entity name
 		std::string name = p.path().filename().string();		//	E.g. "Player.txt", "Player.dat"
 		std::string path = p.path().string();		//	E.g. "Player.txt"
+		/*
 		auto checkIfFType = name.find_first_of('.');
 		name.erase(checkIfFType);							//	now = "Player"
 		name.erase(std::remove(name.begin(), name.end(), '"'), name.end());		//	now = Player																										//	Get the path
+		*/
 
 
 		files.insert(std::make_pair(name, path));
 	}
 
+	int counter = 0;
 	for (const auto& file : files)
 	{
-		std::cout << file.first << " " << file.second << '\n';
-		textureHolder.load(file.first, file.second);
+		std::cout << "Loaded file '" << file.second << "' with ID " << counter << '\n';
+		mTextureHolder.load(counter, file.second);
+		counter++;
 	}
 }

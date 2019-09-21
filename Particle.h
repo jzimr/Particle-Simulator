@@ -15,18 +15,22 @@ public:
 	//Particle*		detachChild(Particle* child);
 
 protected:
-	Particle(float speed, sf::Vector2f direction, sf::Shape* shape);
+	Particle(int speed, sf::Vector2f direction, sf::Shape* shape);
 
 private:
 	Particle();
 	void	draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	// math helper function to normalize a vector
+	sf::Vector2f normalize(const sf::Vector2f & v);
+
+
 private:
-	float mSpeed;
+	int mSpeed;
 	sf::Vector2f mDirection;
 	sf::Vector2f mLocalPosition;
 
-	sf::Shape* mShape; // move outside
+	sf::Shape* mShape; // move outside?
 
 	Particle*						mParent;
 	std::vector<Particle*>			mChildren;

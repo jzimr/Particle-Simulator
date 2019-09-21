@@ -4,7 +4,9 @@
 #include <filesystem>
 #include <iostream>
 #include "SquareParticle.h"
+#include "CircleParticle.h"
 #include "TextureHolder.h"
+#include "SingleParticleFactory.h"
 
 class Game
 {
@@ -23,6 +25,6 @@ private:
 private:
 	static const sf::Time		TimePerFrame;		// How many FPS?
 	sf::RenderWindow			mWindow;
-	std::vector<Particle*>		particles;			// Holds all particles
-	TextureHolder<std::string> textureHolder;		// Holds all textures
+	std::vector<Particle*>		mParticles;			// Holds all mParticles
+	TextureHolder<int>			mTextureHolder;		// Holds all textures
 };

@@ -3,5 +3,6 @@
 
 class CircleParticle : public Particle
 {
-	CircleParticle(float speed, sf::Vector2f direction, sf::Vector2f size, sf::Texture texture);
+public:
+	CircleParticle(int speed, sf::Vector2f direction, int size, sf::Texture& texture);
 };
