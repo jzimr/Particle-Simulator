@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 class Particle : public sf::Transformable, public sf::Drawable, public sf::NonCopyable
@@ -25,7 +26,7 @@ private:
 	sf::Vector2f mDirection;
 	sf::Vector2f mLocalPosition;
 
-	sf::Shape* mShape;
+	sf::Shape* mShape; // move outside
 
 	Particle*						mParent;
 	std::vector<Particle*>			mChildren;

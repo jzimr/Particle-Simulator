@@ -21,6 +21,7 @@ void Particle::update(float dt)
 {
 	sf::Vector2f pos;
 	sf::Vector2f newDirection;
+	float shapeRadius = mShape->getGlobalBounds().width;
 
 	// move object 
 	if (mParent == NULL)
@@ -30,16 +31,27 @@ void Particle::update(float dt)
 	pos = getPosition();
 
 	// check if particle has hit window border
-	if (pos.x >= Settings::WINDOW_X || pos.x <= 0)
+	if (pos.x + shapeRadius >= Settings::WINDOW_X)
 	{
 		mDirection.x *= -1;
-		setPosition(Settings::WINDOW_X, getPosition().y);
+		setPosition(Settings::WINDOW_X - shapeRadius, getPosition().y);
 	}
-	if (pos.y >= Settings::WINDOW_Y || pos.y <= 0)
+	if (pos.x <= 0)
+	{
+		mDirection.x *= -1;
+		setPosition(0, getPosition().y);
+	}
+	if (pos.y + shapeRadius >= Settings::WINDOW_Y)
 	{
 		mDirection.y *= -1;
-		setPosition(getPosition().x, Settings::WINDOW_Y);
+		setPosition(getPosition().x, Settings::WINDOW_Y - shapeRadius);
 	}
+	if (pos.y <= 0)
+	{
+		mDirection.y *= -1;
+		setPosition(getPosition().x, 0);
+	}
+
 
 	// update children
 	for (Particle* child : mChildren)

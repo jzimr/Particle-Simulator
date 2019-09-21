@@ -50,7 +50,7 @@ void Game::processInput()
 
 void Game::update(sf::Time elapsedTime)
 {
-	for(Particle* particle : particles)
+	for (Particle* particle : particles)
 		particle->update(elapsedTime.asSeconds());
 }
 
@@ -60,14 +60,17 @@ void Game::render()
 
 	for (Particle* particle : particles)
 		mWindow.draw(*particle);
-	
+
 	mWindow.display();
 }
 
 void Game::setupScene()
 {
-	Particle* test = new SquareParticle(20.0f, sf::Vector2f(20, 20), sf::Vector2f(1, 1), textureHolder.get("red"));
-
+	for (int i = 0; i < 10000; i++)
+	{
+		Particle* test = new SquareParticle(20.0f, sf::Vector2f(20, 20), 100, textureHolder.get("red"));
+		particles.push_back(test);
+	}
 
 
 }
