@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Constants.h"
+#include "ParticleCareTaker.h"
 
 using namespace Settings;
 
@@ -8,6 +9,8 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 Game::Game()
 	: mWindow(sf::VideoMode(WINDOW_X, WINDOW_Y), "Particle Simulator", sf::Style::Close)
 	, mTextureHolder{}
+	, gamePaused{ false }
+	, mHistory{}
 {
 	mWindow.setKeyRepeatEnabled(false);
 	loadTextures();
@@ -16,11 +19,20 @@ Game::Game()
 
 void Game::run()
 {
-	sf::Clock clock;
+	sf::Clock clockGameLoop;
+	clockMemento.restart();
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen())
 	{
-		sf::Time elapsedTime = clock.restart();
+		// for Memento pattern
+		if (clockMemento.getElapsedTime().asSeconds() >= 1.0f && !gamePaused)
+		{
+			createSnapshots();
+			clockMemento.restart();
+		}
+
+		// for Game loop
+		sf::Time elapsedTime = clockGameLoop.restart();
 		timeSinceLastUpdate += elapsedTime;
 
 		while (timeSinceLastUpdate > TimePerFrame)
@@ -33,6 +45,63 @@ void Game::run()
 
 		render();
 	}
+}
+
+void Game::createSnapshots()
+{
+	int particleId;
+
+	for (auto& particle : mParticles)
+	{
+		particleId = particle->getId();
+		// create new history if particle has none yet
+		if (mHistory.find(particleId) == mHistory.end())
+			mHistory[particleId] = ParticleCareTaker(particle);
+
+		mHistory[particleId].createSnapshot();
+	}
+}
+
+void Game::loadLastSnapshots()
+{
+	int particleId;
+	std::map<int, ParticleCareTaker>::iterator it;
+	std::vector<Particle*> toDelete; // k: particle, v: delete history too?
+
+	for (auto& particle : mParticles)
+	{
+		particleId = particle->getId();
+		it = mHistory.find(particleId);
+		// if does not have Caretaker, delete particle
+		if (it == mHistory.end())
+		{
+			toDelete.push_back(particle);
+			continue;
+		}
+		// if does not have any more history in Caretaker, delete caretaker & particle
+		ParticleCareTaker careTaker = it->second;
+		if (!careTaker.hasHistory())
+		{
+			toDelete.push_back(particle);
+			mHistory.erase(it);
+		}
+		// if has caretaker & history
+		else if (it->second.hasHistory())
+			it->second.undo();
+	}
+
+	// delete all particles that do not have any history
+	for(auto& particle : toDelete)
+	{
+		std::vector<Particle*>::iterator it2 = std::find(mParticles.begin(), mParticles.end(), particle);
+		if (it2 != mParticles.end())
+		{
+			delete particle;
+			particle = nullptr;
+			mParticles.erase(it2);
+		}
+	}
+
 }
 
 void Game::processInput()
@@ -61,7 +130,21 @@ void Game::processInput()
 			std::vector<Particle*> newParticles = mFactory->createParticles(10, converted);
 			mParticles.insert(mParticles.end(), newParticles.begin(), newParticles.end());
 		}
+		if (event.type == sf::Event::KeyPressed)
+		{
+			// "undo" command that goes back to the particles' last state
+			if (event.key.code == sf::Keyboard::Z)
+			{
+				std::cout << "Reverting to last saved state\n";
+				loadLastSnapshots();
+				clockMemento.restart();
+			}
+			// "pause" command to pause all movement
+			if (event.key.code == sf::Keyboard::Space)
+			{
 
+			}
+		}
 	}
 }
 
@@ -108,13 +191,8 @@ void Game::loadTextures()
 			continue;
 
 		///	Get the m_entity name
-		std::string name = p.path().filename().string();		//	E.g. "Player.txt", "Player.dat"
-		std::string path = p.path().string();		//	E.g. "Player.txt"
-		/*
-		auto checkIfFType = name.find_first_of('.');
-		name.erase(checkIfFType);							//	now = "Player"
-		name.erase(std::remove(name.begin(), name.end(), '"'), name.end());		//	now = Player																										//	Get the path
-		*/
+		std::string name = p.path().filename().string();
+		std::string path = p.path().string();
 
 
 		files.insert(std::make_pair(name, path));

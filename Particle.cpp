@@ -1,6 +1,7 @@
 #include "Particle.h"
 #include "Constants.h"
 using namespace Settings;
+typedef Particle::Memento Memento;
 
 Particle::Particle()
 {
@@ -14,9 +15,48 @@ Particle::Particle(int speed, sf::Vector2f direction, sf::Shape* shape)
 	, mChildren{}
 	, mLocalPosition{0,0}
 	, mShape{shape}
+	, mId{counter++}
 {
 }
 
+/*
+Memento Class definitions
+*/
+Memento::Memento(ParticleState state)
+{
+	mState = state;
+}
+ParticleState Memento::getSavedState()
+{
+	return mState;
+}
+
+/*
+Memento Pattern method definitions
+*/
+Memento Particle::saveToMemento()
+{
+	ParticleState newState;
+	newState.position = this->getPosition();
+	newState.direction = this->mDirection;
+
+	return Memento(newState);
+}
+void Particle::restoreFromMemento(Memento memento)
+{
+	ParticleState state = memento.getSavedState();
+	setPosition(state.position);
+	mDirection = state.direction;
+}
+
+int Particle::getId()
+{
+	return mId;
+}
+
+/*
+Particle method definitions
+*/
 void Particle::update(float dt)
 {
 	sf::Vector2f pos;
@@ -73,6 +113,20 @@ void Particle::attachChild(Particle * child, sf::Vector2f offset)
 	child->mLocalPosition = offset;
 }
 
+void Particle::setPosition(float x, float y)
+{
+	Transformable::setPosition(x+mLocalPosition.x, y+mLocalPosition.y);
+	for (auto& child : mChildren)
+		child->setPosition(getPosition().x, getPosition().y);
+}
+
+void Particle::setPosition(const sf::Vector2f position)
+{
+	Transformable::setPosition(position+mLocalPosition);
+	for (auto& child : mChildren)
+		child->setPosition(getPosition());
+}
+
 int Particle::getWidth()
 {
 	return mShape->getGlobalBounds().width;
@@ -103,3 +157,5 @@ sf::Vector2f Particle::normalize(const sf::Vector2f& v)
 	float vLength = sqrtf(pow(v.x, 2) + pow(v.y, 2));
 	return sf::Vector2f(v.x / vLength, v.y / vLength);
 }
+
+int Particle::counter = 0;	// intitialize static counter for IDs

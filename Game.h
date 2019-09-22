@@ -8,6 +8,8 @@
 #include "TextureHolder.h"
 #include "SingleParticleFactory.h"
 #include "ClusterParticleFactory.h"
+#include "Particle.h"
+class ParticleCareTaker;
 
 class Game
 {
@@ -17,6 +19,8 @@ public:
 
 
 private:
+	void			createSnapshots();
+	void			loadLastSnapshots();
 	void			processInput();
 	void			update(sf::Time elapsedTime);
 	void			render();
@@ -25,8 +29,12 @@ private:
 
 private:
 	static const sf::Time		TimePerFrame;		// How many FPS?
+	sf::Clock					clockMemento;		// counts time for memento snapshots
 	sf::RenderWindow			mWindow;
 	ParticleFactory*			mFactory;
 	std::vector<Particle*>		mParticles;			// Holds all mParticles
+	std::map<int, ParticleCareTaker> mHistory; // k: Particle ID, v: caretaker objects
 	TextureHolder<int>			mTextureHolder;		// Holds all textures
+	bool						gamePaused;
+	sf::Time					saveClockState;
 };
