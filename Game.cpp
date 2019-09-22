@@ -25,8 +25,11 @@ void Game::run()
 	while (mWindow.isOpen())
 	{
 		// for Memento pattern
-		if (clockMemento.getElapsedTime().asSeconds() >= 1.0f && !gamePaused)
+		if (clockMemento.getElapsedTime().asSeconds() + savedClockTime >= 1.0f && !gamePaused)
 		{
+			if (savedClockTime > 0.00001f)
+				savedClockTime = 0.0f;
+
 			createSnapshots();
 			clockMemento.restart();
 		}
@@ -40,7 +43,8 @@ void Game::run()
 			timeSinceLastUpdate -= TimePerFrame;
 
 			processInput();
-			update(TimePerFrame);
+			if(!gamePaused)
+				update(TimePerFrame);
 		}
 
 		render();
@@ -74,13 +78,9 @@ void Game::loadLastSnapshots()
 		it = mHistory.find(particleId);
 		// if does not have Caretaker, delete particle
 		if (it == mHistory.end())
-		{
 			toDelete.push_back(particle);
-			continue;
-		}
 		// if does not have any more history in Caretaker, delete caretaker & particle
-		ParticleCareTaker careTaker = it->second;
-		if (!careTaker.hasHistory())
+		else if (!it->second.hasHistory())
 		{
 			toDelete.push_back(particle);
 			mHistory.erase(it);
@@ -91,7 +91,7 @@ void Game::loadLastSnapshots()
 	}
 
 	// delete all particles that do not have any history
-	for(auto& particle : toDelete)
+	for (auto& particle : toDelete)
 	{
 		std::vector<Particle*>::iterator it2 = std::find(mParticles.begin(), mParticles.end(), particle);
 		if (it2 != mParticles.end())
@@ -143,6 +143,16 @@ void Game::processInput()
 			if (event.key.code == sf::Keyboard::Space)
 			{
 
+				if (gamePaused)
+				{
+					clockMemento.restart();
+					gamePaused = false;
+				}
+				else
+				{
+					savedClockTime = clockMemento.getElapsedTime().asSeconds();
+					gamePaused = true;
+				}
 			}
 		}
 	}

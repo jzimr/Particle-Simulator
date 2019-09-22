@@ -36,5 +36,5 @@ private:
 	std::map<int, ParticleCareTaker> mHistory; // k: Particle ID, v: caretaker objects
 	TextureHolder<int>			mTextureHolder;		// Holds all textures
 	bool						gamePaused;
-	sf::Time					saveClockState;
+	float 						savedClockTime;
 };
