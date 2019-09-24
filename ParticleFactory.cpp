@@ -8,7 +8,7 @@ ParticleFactory::ParticleFactory()
 
 ParticleType* ParticleFactory::getParticleInCache(ParticleType::ShapeType ShapeType, int size, sf::Texture & texture)
 {
-	for (ParticleType* pType : particleTypes)
+	for (ParticleType* pType : mParticleTypes)
 	{
 		if (pType->isEqualTo(ShapeType, size, texture))
 			return pType;
@@ -56,7 +56,7 @@ Particle* ParticleFactory::createRandomParticle(sf::Vector2f pos)
 	if (particleType == nullptr)
 	{
 		particleType = new ParticleType((ShapeType)randShape, randSize, mTextureHolder->get(randTexture));
-		particleTypes.push_back(particleType);
+		mParticleTypes.push_back(particleType);
 	}
 	particle = createNewParticle((ShapeType)randShape, particleType, randSpeed, sf::Vector2f(randDirectionX, randDirectionY));
 
@@ -72,4 +72,4 @@ int ParticleFactory::getRand(int start, int end)
 	return rand() % ((end - start) + 1) + start;
 }
 
-std::vector<ParticleType*> ParticleFactory::particleTypes;
+std::vector<ParticleType*> ParticleFactory::mParticleTypes;

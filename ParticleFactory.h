@@ -32,5 +32,5 @@ protected:
 	TextureHolder<int>* mTextureHolder;
 
 private:
-	static std::vector<ParticleType*> particleTypes;
+	static std::vector<ParticleType*> mParticleTypes;
 };
