@@ -8,13 +8,13 @@ Particle::Particle()
 	throw "Direct instantiation of 'Particle' class not allowed";
 }
 
-Particle::Particle(int speed, sf::Vector2f direction, sf::Shape* shape)
-	: mSpeed{speed}
+Particle::Particle(ParticleType* type, int speed, sf::Vector2f direction)
+	: mType{ type }
+	, mSpeed{speed}
 	, mDirection{normalize(direction)} // normalize direction so speed values have the same weight in all objects
 	, mParent{NULL}
 	, mChildren{}
 	, mLocalPosition{0,0}
-	, mShape{shape}
 	, mId{counter++}
 {
 }
@@ -99,11 +99,6 @@ void Particle::update(float dt)
 		child->update(dt);
 }
 
-void Particle::setTexture(const sf::Texture& tex)
-{
-	mShape->setTexture(&tex);
-}
-
 void Particle::attachChild(Particle * child, sf::Vector2f offset)
 {
 	mChildren.push_back(child);
@@ -129,12 +124,11 @@ void Particle::setPosition(const sf::Vector2f position)
 
 int Particle::getWidth()
 {
-	return mShape->getGlobalBounds().width;
+	return mType->mShape->getGlobalBounds().width;
 }
 
 Particle::~Particle()
 {
-	delete mShape;
 	for (Particle* child : mChildren)
 		delete child;
 }
@@ -144,12 +138,12 @@ void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// apply transform of current node
 	states.transform *= getTransform();
 
-	// draw node and children with changed transform
-	target.draw(*mShape, states);
+	// draw flyweight shape and children with changed transform
+	mType->draw(target, states);
 
 	// draw children
 	for (const Particle* child : mChildren)
-		target.draw(*child);
+		child->mType->draw(target, states);
 }
 
 sf::Vector2f Particle::normalize(const sf::Vector2f& v)

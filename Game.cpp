@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Constants.h"
-#include "ParticleCareTaker.h"
 
 using namespace Settings;
 
@@ -176,16 +175,6 @@ void Game::render()
 
 void Game::setupScene()
 {
-
-	/*
-		for (int i = 0; i < 20; i++)
-{
-	Particle* test = new CircleParticle(20, sf::Vector2f(20, 20), 15, mTextureHolder.get(0));
-	mParticles.push_back(test);
-}
-	*/
-
-
 }
 
 void Game::loadTextures()
@@ -206,6 +195,11 @@ void Game::loadTextures()
 
 
 		files.insert(std::make_pair(name, path));
+	}
+
+	if (files.size() == 0)
+	{
+		throw "Did not find any textures.\n Please put at least 1 texture into 'media' folder";
 	}
 
 	int counter = 0;

@@ -3,13 +3,13 @@
 #include "SFML/Window.hpp"
 #include <filesystem>
 #include <iostream>
+#include "ParticleCareTaker.h"
 #include "SquareParticle.h"
 #include "CircleParticle.h"
 #include "TextureHolder.h"
 #include "SingleParticleFactory.h"
 #include "ClusterParticleFactory.h"
 #include "Particle.h"
-class ParticleCareTaker;
 
 class Game
 {

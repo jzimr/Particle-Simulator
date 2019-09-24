@@ -1,7 +1,6 @@
 #include "SquareParticle.h"
 
-SquareParticle::SquareParticle(int speed, sf::Vector2f direction, int size, sf::Texture& texture)
-	: Particle(speed, direction, new sf::RectangleShape{ sf::Vector2f(size, size) })
+SquareParticle::SquareParticle(ParticleType* type, int speed, sf::Vector2f direction)
+	: Particle(type, speed, direction)
 {
-	setTexture(texture);
 }

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "ParticleState.h"
+#include "ParticleType.h"
 
 class Particle : public sf::Transformable, public sf::Drawable, public sf::NonCopyable
 {
@@ -33,8 +34,6 @@ public:
 	int				getId();
 	void			update(float dt);
 
-	void			setTexture(const sf::Texture& tex);
-
 	void			attachChild(Particle* child, sf::Vector2f offset = sf::Vector2f(0,0));
 	void			setPosition(float x, float y);
 	void			setPosition(const sf::Vector2f position);
@@ -44,7 +43,7 @@ public:
 	~Particle();
 
 protected:
-	Particle(int speed, sf::Vector2f direction, sf::Shape* shape);
+	Particle(ParticleType* type, int speed, sf::Vector2f direction);
 
 private:
 	Particle();
@@ -60,7 +59,7 @@ private:
 	sf::Vector2f mDirection;
 	sf::Vector2f mLocalPosition;
 
-	sf::Shape* mShape;
+	ParticleType* mType;
 
 	Particle*						mParent;
 	std::vector<Particle*>			mChildren;
