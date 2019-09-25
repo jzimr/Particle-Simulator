@@ -42,7 +42,7 @@ void Game::run()
 			timeSinceLastUpdate -= TimePerFrame;
 
 			processInput();
-			if(!gamePaused)
+			if (!gamePaused)
 				update(TimePerFrame);
 		}
 

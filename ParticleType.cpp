@@ -17,12 +17,17 @@ ParticleType::ParticleType(ShapeType shapeType, int size, sf::Texture & texture)
 
 bool ParticleType::isEqualTo(ShapeType shapeType, int size, sf::Texture & texture)
 {
-	if (shapeType == mShapeType &&
-		mShape->getGlobalBounds().width == size &&
-		mShape->getTexture() == &texture)
+	if (shapeType == mShapeType && shapeType == ShapeType::Square)
 	{
-		//std::cout << "I already have this shape in cache, loading...";
-		return true;
+		if (mShape->getGlobalBounds().width == size &&
+			mShape->getTexture() == &texture)
+			return true;
+	}
+	else if (shapeType == mShapeType && shapeType == ShapeType::Circle)
+	{
+		if (dynamic_cast<sf::CircleShape*>(mShape)->getRadius() == size &&
+			mShape->getTexture() == &texture)
+			return true;
 	}
 	return false;
 }
