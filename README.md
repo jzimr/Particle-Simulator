@@ -1,5 +1,6 @@
 # Particle-Simulator
 A Particle Simulator created in SFML to show the uses of Factory Method, Flyweight and Memento pattern.
+[Latest release](https://github.com/multicus/Particle-Simulator/releases/tag/v1.0) 
 
 Example of spawning single (left mouse) and cluster particles (right mouse):
 ![](Github-files/showcase1.gif)
